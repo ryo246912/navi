@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Install stable toolchain
         uses: actions-rs/toolchain@v1
@@ -52,19 +52,13 @@ jobs:
           touch /tmp/config-file
 
       - name: Run cargo test
-        uses: actions-rs/cargo@v1
-        continue-on-error: false
+        run: cargo test
         env:
           NAVI_PATH: /tmp/cheats-dir
           NAVI_CONFIG: /tmp/config-file
-        with:
-          command: test
 
       - name: Run cargo test
-        uses: actions-rs/cargo@v1
-        continue-on-error: false
-        with:
-          command: test
+        run: cargo test
 
       - name: Install deps
         run: ./scripts/dot pkg add git bash npm tmux
@@ -83,26 +77,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v2
-
-      # - name: Install stable toolchain
-      #   uses: actions-rs/toolchain@v1
-      #   with:
-      #     profile: minimal
-      #     toolchain: stable
-      #     override: true
-      #     components: rustfmt, clippy
+        uses: actions/checkout@v4
 
       - name: Run cargo fmt
-        uses: actions-rs/cargo@v1
-        continue-on-error: false
-        with:
-          command: fmt
-          args: --all -- --check
+        run: cargo fmt --all -- --check
 
       - name: Run cargo clippy
-        uses: actions-rs/cargo@v1
-        continue-on-error: false
-        with:
-          command: clippy
-          args: -- -D warnings
+        run: cargo clippy -- -D warnings
